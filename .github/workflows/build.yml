@@ -1,16 +1,11 @@
-name: Build Electron App
+name: Build Mac Only
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -26,11 +21,11 @@ jobs:
     - name: Build Vue
       run: npm run build
 
-    - name: Build Electron
-      run: npm run electron:build
+    - name: Build Electron for Mac
+      run: npm run electron:build -- --mac
 
-    - name: Upload artifacts
+    - name: Upload Mac Build
       uses: actions/upload-artifact@v4
       with:
-        name: build-${{ matrix.os }}
+        name: build-mac
         path: build/
