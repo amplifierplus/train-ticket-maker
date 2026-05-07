@@ -16,13 +16,23 @@ jobs:
         node-version: 20
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        npm install
+        npm install -g electron-builder
 
     - name: Build Vue
       run: npm run build
 
+    - name: Debug file list
+      run: ls -la
+
     - name: Build Electron for Mac
-      run: npm run electron:build -- --mac
+      run: |
+        npx electron-builder --mac --dir
+        npx electron-builder --mac --dmg
+      env:
+        CI: true
+        DEBUG: electron-builder
 
     - name: Upload Mac Build
       uses: actions/upload-artifact@v4
