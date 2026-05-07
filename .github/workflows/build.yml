@@ -25,8 +25,8 @@ jobs:
       - name: Build Electron for Mac
         run: npx electron-builder --mac --publish never
 
-      - name: Upload Build
+      - name: Upload Mac Build
         uses: actions/upload-artifact@v4
         with:
           name: mac-build
-          path: build/
+          path: dist/
