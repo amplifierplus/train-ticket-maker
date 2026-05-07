@@ -26,22 +26,17 @@
   },
   "build": {
     "appId": "com.ticket.maker",
-    "productName": "火车票生成器",
+    "productName": "TrainTicketMaker",
     "mac": {
       "category": "public.app-category.utilities",
-      "target": ["dmg", "zip"],
-      "icon": "icon.icns"
+      "target": "dmg"
     },
     "win": {
-      "target": ["nsis", "portable"],
-      "icon": "icon.ico"
+      "target": "nsis"
     },
     "files": [
-      "dist/**/*",
+      "dist/**",
       "main.js"
-    ],
-    "directories": {
-      "output": "build"
-    }
+    ]
   }
 }
