@@ -9,6 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 进入正确目录（关键修复）
+      run: cd train-ticket-maker
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -16,26 +21,16 @@ jobs:
         node-version: 20
 
     - name: Install dependencies
-      run: |
-        npm install
-        npm install -g electron-builder
+      run: cd train-ticket-maker && npm install
 
     - name: Build Vue
-      run: npm run build
-
-    - name: Debug file list
-      run: ls -la
+      run: cd train-ticket-maker && npm run build
 
     - name: Build Electron for Mac
-      run: |
-        npx electron-builder --mac --dir
-        npx electron-builder --mac --dmg
-      env:
-        CI: true
-        DEBUG: electron-builder
+      run: cd train-ticket-maker && npx electron-builder --mac
 
     - name: Upload Mac Build
       uses: actions/upload-artifact@v4
       with:
         name: build-mac
-        path: build/
+        path: train-ticket-maker/build/
