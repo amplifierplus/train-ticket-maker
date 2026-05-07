@@ -26,18 +26,19 @@
   },
   "build": {
     "appId": "com.ticket.maker",
+    "productName": "火车票生成器",
     "mac": {
       "category": "public.app-category.utilities",
-      "target": "dmg"
+      "target": ["dmg", "zip"],
+      "icon": "icon.icns"
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis", "portable"],
       "icon": "icon.ico"
     },
     "files": [
-      "dist/**",
-      "main.js",
-      "icon.ico"
+      "dist/**/*",
+      "main.js"
     ],
     "directories": {
       "output": "build"
