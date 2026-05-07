@@ -26,21 +26,19 @@
   },
   "build": {
     "appId": "com.ticket.maker",
+    "productName": "TicketMaker",
     "mac": {
-      "category": "public.app-category.utilities",
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "icon.icns",
+      "category": "public.app-category.utilities"
     },
     "win": {
       "target": "nsis",
       "icon": "icon.ico"
     },
     "files": [
-      "dist/**",
-      "main.js",
-      "icon.ico"
-    ],
-    "directories": {
-      "output": "build"
-    }
+      "dist/**/*",
+      "main.js"
+    ]
   }
 }
