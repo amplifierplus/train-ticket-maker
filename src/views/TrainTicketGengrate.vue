@@ -111,7 +111,12 @@
             <form @submit.prevent="handleSaveImage" class="space-y-4">
               <!-- 底部售票信息（JM编码） -->
               <div class="border-b border-gray-200 pb-4">
-                <h3 class="text-base font-semibold text-gray-700 mb-3">🏷️ 底部售票编码</h3>
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-base font-semibold text-gray-700">🏷️ 底部售票编码</h3>
+                  <button @click="refreshRandomCodes" type="button" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md flex items-center gap-1">
+                    🔄 刷新编号
+                  </button>
+                </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div><label class="block text-xs text-gray-500 mb-1">车站代码（每个车站固定5位）</label><input v-model="form.stationCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：65773" maxlength="5"></div>
                   <div><label class="block text-xs text-gray-500 mb-1">售票点信息（可随机生成）</label><select v-model="form.datePrefix" class="w-full px-3 py-2 border rounded-md"><option value="">随机生成</option><option value="30">30</option><option value="31">31</option><option value="33">33</option><option value="00">00</option></select></div>
@@ -267,6 +272,18 @@ function generateFooterInfo() {
 
 let isInitializing = false
 function initializeForm() {
+  form.stationCode = randomNumber(10000, 99999, 5)
+  const rand = Math.random()
+  form.datePrefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00'
+  form.sequence = randomNumber(1, 24, 3)
+  form.dateSuffix = calculateNextDate()
+  form.randomCode = randomSevenDigitCode()
+  form.serial = form.randomCode
+  form.footerInfo = generateFooterInfo()
+}
+
+// 手动刷新 JM 编号
+function refreshRandomCodes() {
   form.stationCode = randomNumber(10000, 99999, 5)
   const rand = Math.random()
   form.datePrefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00'
