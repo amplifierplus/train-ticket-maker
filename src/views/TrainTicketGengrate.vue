@@ -94,7 +94,7 @@
                   <div><label class="block text-xs text-gray-500 mb-1">车站代码（每个车站固定5位）</label><input v-model="form.stationCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：65773" maxlength="5"></div>
                   <div><label class="block text-xs text-gray-500 mb-1">售票点信息（可随机生成）</label><select v-model="form.datePrefix" class="w-full px-3 py-2 border rounded-md"><option value="">随机生成</option><option value="30">30</option><option value="31">31</option><option value="33">33</option><option value="00">00</option></select></div>
                   <div><label class="block text-xs text-gray-500 mb-1">售票窗口编号（3位，可随机生成）</label><input v-model="form.sequence" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：012" maxlength="3"></div>
-                  <div><label class="block text-xs text-gray-500 mb-1">财收结帐日期(一般为购票后一天，此处默认发车后一天)</label><input v-model="form.dateSuffix" type="text" class="w-full px-3 py-2 border rounded-md"></div>
+                  <div><label class="block text-xs text-gray-500 mb-1">财收结帐日期(4位数字，一般为购票后一天，可设置为发车后一天)</label><input v-model="form.dateSuffix" type="text" class="w-full px-3 py-2 border rounded-md"></div>
                   <div class="sm:col-span-2"><label class="block text-xs text-gray-500 mb-1">车票编号（7位）</label><input v-model="form.randomCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：A000001" maxlength="7"></div>
                   <div class="sm:col-span-2"><div class="text-xs text-gray-500">完整编码：{{ form.footerInfo }}</div></div>
                 </div>
@@ -148,7 +148,7 @@ import TrainTicket from '@/components/TrainTicket.vue'
 import { toPng } from 'html-to-image'
 
 const form = reactive({
-  serial: 'A000001', gate: '5A', fromStation: '上海虹桥', fromPinyin: 'ShanghaiHongqiao',
+  serial: 'A000001', gate: '5A', fromStation: '上海虹桥', fromPinyin: 'Shanghaihongqiao',
   toStation: '南京南', toPinyin: 'Nanjingnan', trainCode: 'G2025', dateTime: '2023-10-01T08:30',
   carriage: '07', seatNumber: '12F', price: '443.5', seatType: '一等座',
   idNumber: '3201021990****5678', passengerName: '张三', footerInfo: '', discountType: '',
@@ -165,28 +165,17 @@ function randomNumber(min, max, length) { const num = Math.floor(Math.random() *
 function randomLetter() { const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; return letters[Math.floor(Math.random() * letters.length)] }
 function randomSevenDigitCode() { return `${randomLetter()}${randomNumber(1, 999999, 6)}` }
 
+// ==============================================
+// 已修改：只首字母大写，后面全部小写
+// ==============================================
 function capitalizeFirstLetter(pinyin) {
   if (!pinyin) return ''
   const lower = pinyin.toLowerCase()
-  const cityPatterns = [['shanghai', 'Shanghai'], ['beijing', 'Beijing'], ['guangzhou', 'Guangzhou'], ['shenzhen', 'Shenzhen'], ['nanjing', 'Nanjing'], ['hangzhou', 'Hangzhou'], ['chengdu', 'Chengdu'], ['wuhan', 'Wuhan'], ['xian', "Xi'an"], ['tianjin', 'Tianjin'], ['chongqing', 'Chongqing'], ['suzhou', 'Suzhou'], ['qingdao', 'Qingdao'], ['dalian', 'Dalian'], ['zhengzhou', 'Zhengzhou'], ['changsha', 'Changsha'], ['kunming', 'Kunming'], ['taiyuan', 'Taiyuan'], ['shijiazhuang', 'Shijiazhuang'], ['hefei', 'Hefei'], ['foshan', 'Foshan'], ['dongguan', 'Dongguan'], ['wenzhou', 'Wenzhou'], ['nantong', 'Nantong'], ['yanbian', 'Yanbian']]
-  let result = lower
-  for (const [lower, upper] of cityPatterns) { result = result.replace(lower, upper) }
-  if (result === lower) {
-    const suffixes = [['hongqiao', 'Hongqiao'], ['binjiang', 'Binjiang'], ['dong', 'Dong'], ['xi', 'Xi'], ['nan', 'Nan'], ['bei', 'Bei'], ['zhong', 'Zhong']]
-    for (const [lowerSuffix, upperSuffix] of suffixes) {
-      if (result.endsWith(lowerSuffix)) {
-        const prefix = result.slice(0, -lowerSuffix.length)
-        result = prefix ? prefix.charAt(0).toUpperCase() + prefix.slice(1) + upperSuffix : upperSuffix
-        break
-      }
-    }
-  }
-  if (result === lower) result = lower.charAt(0).toUpperCase() + lower.slice(1)
-  return result
+  return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
-function handleFromPinyinInput(event) { form.fromPinyin = capitalizeFirstLetter(event.target.value.toLowerCase()) }
-function handleToPinyinInput(event) { form.toPinyin = capitalizeFirstLetter(event.target.value.toLowerCase()) }
+function handleFromPinyinInput(event) { form.fromPinyin = capitalizeFirstLetter(event.target.value) }
+function handleToPinyinInput(event) { form.toPinyin = capitalizeFirstLetter(event.target.value) }
 
 function calculateNextDate() { 
   const date = new Date(form.dateTime); 
@@ -199,7 +188,6 @@ function generateFooterInfo() {
   let prefix = form.datePrefix
   if (!prefix) { const rand = Math.random(); prefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00' }
   const seq = form.sequence ? form.sequence.padStart(3, '0') : randomNumber(1, 24, 3)
-  // 优先用手动输入，没有再自动+1
   const suffix = form.dateSuffix || calculateNextDate()
   const code = form.randomCode ? form.randomCode.toUpperCase() : randomSevenDigitCode()
   return `${station}${prefix}${seq}${suffix}${code} JM`
@@ -211,7 +199,6 @@ function initializeForm() {
   const rand = Math.random()
   form.datePrefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00'
   form.sequence = randomNumber(1, 24, 3)
-  // 初始化默认+1
   form.dateSuffix = calculateNextDate()
   form.randomCode = randomSevenDigitCode()
   form.serial = form.randomCode
@@ -220,7 +207,6 @@ function initializeForm() {
 
 onMounted(() => { isInitializing = true; initializeForm(); isInitializing = false })
 
-// 监听包含手动日期后缀
 watch([() => form.stationCode, () => form.datePrefix, () => form.sequence, () => form.dateTime, () => form.randomCode, () => form.dateSuffix], () => {
   if (isInitializing) return
   form.footerInfo = generateFooterInfo()
@@ -247,7 +233,6 @@ const handleSaveImage = async () => {
 </script>
 
 <style>
-/* 预览容器缩小，高度变短、缩放更小 */
 .preview-container {
   display: flex;
   align-items: center;
