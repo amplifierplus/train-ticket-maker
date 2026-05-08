@@ -45,7 +45,16 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div><label class="block text-xs text-gray-500 mb-1">车厢号</label><input v-model="form.carriage" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：07" required></div>
                 <div v-if="sleeperTypes.includes(form.seatType)"><label class="block text-xs text-gray-500 mb-1">铺位类型</label><select v-model="form.berthType" class="w-full px-3 py-2 border rounded-md"><option value="">选择铺位</option><option value="上">上铺</option><option value="中">中铺</option><option value="下">下铺</option></select></div>
-                <div><label class="block text-xs text-gray-500 mb-1">{{ sleeperTypes.includes(form.seatType) ? '铺位号' : '座位号' }}</label><input v-model="form.seatNumber" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：12F" required></div>
+                
+                <!-- ====================== 无座修改 ====================== -->
+                <div>
+                  <label class="block text-xs text-gray-500 mb-1">
+                    {{ sleeperTypes.includes(form.seatType) ? '铺位号' : (form.seatType === '无座' ? '座位' : '座位号') }}
+                  </label>
+                  <input v-model="form.seatNumber" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：12F" required>
+                </div>
+                <!-- ======================================================= -->
+                
                 <div><label class="block text-xs text-gray-500 mb-1">票价（元）</label><input v-model="form.price" type="number" step="0.5" class="w-full px-3 py-2 border rounded-md" placeholder="例：443.5" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">票号（左上角）</label><input v-model="form.serial" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：A000001" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">优惠类型</label><select v-model="form.discountType" class="w-full px-3 py-2 border rounded-md">
@@ -177,7 +186,6 @@ function randomSevenDigitCode() {
   // 第二位固定 0
   return letter + '0' + num
 }
-
 // ==============================================
 // 已修改：只首字母大写，后面全部小写
 // ==============================================
