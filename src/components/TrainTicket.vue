@@ -120,10 +120,8 @@
             </div>
 
             <!-- 退票费行 -->
-            <div v-if="refundFee" class="flex justify-between pr-[100px] items-center mt-[-8px]">
-              <div class="text-[30px]">
-                退票费：<span class="text-[35px]">￥{{ refundFee }}<span class="text-[24px]">元</span></span>
-              </div>
+            <div v-if="hasRefundFee" class="mt-[-8px] text-[30px]">
+              退票费
             </div>
 
             <p class="muted text-[30px]"><br></p>
@@ -208,7 +206,7 @@ const props = defineProps({
   seatNumber: { type: String, default: '04D' },
   berthType: { type: String, default: '' },
   price: { type: String, default: '239.0' },
-  refundFee: { type: String, default: '' },
+  hasRefundFee: { type: Boolean, default: false },
   seatType: { type: String, default: '二等座' },
   idNumber: { type: String, default: '14041111985****0854' },
   passengerName: { type: String, default: '李小二' },
