@@ -7,7 +7,7 @@
     <div class="max-w-6xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <!-- 左侧：基础表单（精简保留核心） -->
+        <!-- 左侧：基础表单 -->
         <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
           <form @submit.prevent="handleSaveImage" class="space-y-4">
 
@@ -46,15 +46,14 @@
                 <div><label class="block text-xs text-gray-500 mb-1">车厢号</label><input v-model="form.carriage" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：07" required></div>
                 <div v-if="sleeperTypes.includes(form.seatType)"><label class="block text-xs text-gray-500 mb-1">铺位类型</label><select v-model="form.berthType" class="w-full px-3 py-2 border rounded-md"><option value="">选择铺位</option><option value="上">上铺</option><option value="中">中铺</option><option value="下">下铺</option></select></div>
                 
-                <!-- ====================== 无座修改 ====================== -->
+                <!-- 座位号标签：无座时显示“座位”，其他显示“座位号” -->
                 <div>
                   <label class="block text-xs text-gray-500 mb-1">
-                    {{ sleeperTypes.includes(form.seatType) ? '铺位号' : (form.seatType === '无座' ? '座位' : '座位号') }}
+                    {{ sleeperTypes.includes(form.seatType) ? '铺位号' : (form.seatNumber === '无座' ? '座位' : '座位号') }}
                   </label>
                   <input v-model="form.seatNumber" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：12F" required>
                 </div>
-                <!-- ======================================================= -->
-                
+
                 <div><label class="block text-xs text-gray-500 mb-1">票价（元）</label><input v-model="form.price" type="number" step="0.5" class="w-full px-3 py-2 border rounded-md" placeholder="例：443.5" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">票号（左上角）</label><input v-model="form.serial" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：A000001" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">优惠类型</label><select v-model="form.discountType" class="w-full px-3 py-2 border rounded-md">
@@ -77,23 +76,37 @@
           </form>
         </div>
 
-        <!-- 右侧：预览 + 下放的扩展表单 -->
+        <!-- 右侧：预览 + 扩展表单 -->
         <div class="flex flex-col gap-4">
-          <!-- 预览容器 缩小高度+缩放 -->
+          <!-- 预览容器 -->
           <div class="bg-white rounded-lg shadow-md p-4">
             <h3 class="text-lg font-semibold text-gray-700 mb-3">🔍 实时预览</h3>
             <div class="preview-container flex items-center justify-center">
               <TrainTicket
-                :serial="form.serial" :gate="form.gate" :fromStation="form.fromStation" :fromPinyin="form.fromPinyin"
-                :toStation="form.toStation" :toPinyin="form.toPinyin" :trainCode="form.trainCode" :dateTime="form.dateTime"
-                :carriage="form.carriage" :seatNumber="form.seatNumber" :berthType="form.berthType" :price="form.price" :seatType="form.seatType"
-                :idNumber="form.idNumber" :passengerName="form.passengerName" :footerInfo="form.footerInfo" :discountType="form.discountType"
-                :style="form.ticketType" :detail-lines="form.detailLines"
+                :serial="form.serial"
+                :gate="form.gate"
+                :fromStation="form.fromStation"
+                :fromPinyin="form.fromPinyin"
+                :toStation="form.toStation"
+                :toPinyin="form.toPinyin"
+                :trainCode="form.trainCode"
+                :dateTime="form.dateTime"
+                :carriage="form.carriage"
+                :seatNumber="form.seatNumber"
+                :berthType="form.berthType"
+                :price="form.price"
+                :seatType="form.seatType"
+                :idNumber="form.idNumber"
+                :passengerName="form.passengerName"
+                :footerInfo="form.footerInfo"
+                :discountType="form.discountType"
+                :style="form.ticketType"
+                :detail-lines="form.detailLines"
               />
             </div>
           </div>
 
-          <!-- 右侧下方：移过来的扩展配置 -->
+          <!-- 右侧下方：扩展配置 -->
           <div class="bg-white rounded-lg shadow-md p-4">
             <form @submit.prevent="handleSaveImage" class="space-y-4">
               <!-- 底部售票信息（JM编码） -->
@@ -141,11 +154,25 @@
     <div class="fixed top-0 left-0 w-[856px] h-[540px] bg-white z-[-1] opacity-0 pointer-events-none" id="hidden-ticket-area">
       <TrainTicket
         ref="hiddenTicketRef"
-        :serial="form.serial" :gate="form.gate" :fromStation="form.fromStation" :fromPinyin="form.fromPinyin"
-        :toStation="form.toStation" :toPinyin="form.toPinyin" :trainCode="form.trainCode" :dateTime="form.dateTime"
-        :carriage="form.carriage" :seatNumber="form.seatNumber" :berthType="form.berthType" :price="form.price" :seatType="form.seatType"
-        :idNumber="form.idNumber" :passengerName="form.passengerName" :footerInfo="form.footerInfo" :discountType="form.discountType"
-        :style="form.ticketType" :detail-lines="form.detailLines"
+        :serial="form.serial"
+        :gate="form.gate"
+        :fromStation="form.fromStation"
+        :fromPinyin="form.fromPinyin"
+        :toStation="form.toStation"
+        :toPinyin="form.toPinyin"
+        :trainCode="form.trainCode"
+        :dateTime="form.dateTime"
+        :carriage="form.carriage"
+        :seatNumber="form.seatNumber"
+        :berthType="form.berthType"
+        :price="form.price"
+        :seatType="form.seatType"
+        :idNumber="form.idNumber"
+        :passengerName="form.passengerName"
+        :footerInfo="form.footerInfo"
+        :discountType="form.discountType"
+        :style="form.ticketType"
+        :detail-lines="form.detailLines"
       />
     </div>
   </div>
@@ -157,57 +184,81 @@ import TrainTicket from '@/components/TrainTicket.vue'
 import { toPng } from 'html-to-image'
 
 const form = reactive({
-  serial: 'A000001', gate: '5A', fromStation: '上海虹桥', fromPinyin: 'Shanghaihongqiao',
-  toStation: '南京南', toPinyin: 'Nanjingnan', trainCode: 'G2025', dateTime: '2023-10-01T08:30',
-  carriage: '07', seatNumber: '12F', price: '443.5', seatType: '一等座',
-  idNumber: '3201021990****5678', passengerName: '张三', footerInfo: '', discountType: '',
-  berthType: '', ticketType: 'blue', detailLines: ['仅供纪念 遗失不补', '改签退票须交回车站'],
-  stationCode: '', datePrefix: '', sequence: '', dateSuffix: '', randomCode: '',
+  serial: 'A000001',
+  gate: '5A',
+  fromStation: '上海虹桥',
+  fromPinyin: 'Shanghaihongqiao',
+  toStation: '南京南',
+  toPinyin: 'Nanjingnan',
+  trainCode: 'G2025',
+  dateTime: '2023-10-01T08:30',
+  carriage: '07',
+  seatNumber: '12F',
+  price: '443.5',
+  seatType: '一等座',
+  idNumber: '3201021990****5678',
+  passengerName: '张三',
+  footerInfo: '',
+  discountType: '',
+  berthType: '',
+  ticketType: 'blue',
+  detailLines: ['仅供纪念 遗失不补', '改签退票须交回车站'],
+  stationCode: '',
+  datePrefix: '',
+  sequence: '',
+  dateSuffix: '',
+  randomCode: '',
 })
 
 const sleeperTypes = ['软卧', '硬卧', '动卧', '高级软卧', '一等卧', '二等卧', '新空调硬卧', '新空调软卧']
 const hiddenTicketRef = ref(null)
 
-watch(() => form.seatType, (newVal) => { if (!sleeperTypes.includes(newVal)) form.berthType = '' })
+watch(() => form.seatType, (newVal) => {
+  if (!sleeperTypes.includes(newVal)) form.berthType = ''
+})
 
-function randomNumber(min, max, length) { const num = Math.floor(Math.random() * (max - min + 1)) + min; return num.toString().padStart(length, '0') }
-// 随机大写字母 排除 I O
+function randomNumber(min, max, length) {
+  const num = Math.floor(Math.random() * (max - min + 1)) + min
+  return num.toString().padStart(length, '0')
+}
+
 function randomLetter() {
-  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
   return letters[Math.floor(Math.random() * letters.length)]
 }
 
-// 7位票号：第1位字母(无I/O) + 第2位固定0 + 后5位数字
-// 格式：X0#####  7位总长
 function randomSevenDigitCode() {
   const letter = randomLetter()
-  // 5位数字 00000 ~ 99999
   const num = Math.floor(Math.random() * 100000).toString().padStart(5, '0')
-  // 第二位固定 0
   return letter + '0' + num
 }
-// ==============================================
-// 已修改：只首字母大写，后面全部小写
-// ==============================================
+
 function capitalizeFirstLetter(pinyin) {
   if (!pinyin) return ''
   const lower = pinyin.toLowerCase()
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
-function handleFromPinyinInput(event) { form.fromPinyin = capitalizeFirstLetter(event.target.value) }
-function handleToPinyinInput(event) { form.toPinyin = capitalizeFirstLetter(event.target.value) }
+function handleFromPinyinInput(event) {
+  form.fromPinyin = capitalizeFirstLetter(event.target.value)
+}
+function handleToPinyinInput(event) {
+  form.toPinyin = capitalizeFirstLetter(event.target.value)
+}
 
-function calculateNextDate() { 
-  const date = new Date(form.dateTime); 
-  date.setDate(date.getDate() + 1); 
-  return `${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}` 
+function calculateNextDate() {
+  const date = new Date(form.dateTime)
+  date.setDate(date.getDate() + 1)
+  return `${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
 }
 
 function generateFooterInfo() {
   const station = form.stationCode || randomNumber(10000, 99999, 5)
   let prefix = form.datePrefix
-  if (!prefix) { const rand = Math.random(); prefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00' }
+  if (!prefix) {
+    const rand = Math.random()
+    prefix = rand < 0.4 ? '30' : rand < 0.8 ? '31' : rand < 0.9 ? '33' : '00'
+  }
   const seq = form.sequence ? form.sequence.padStart(3, '0') : randomNumber(1, 24, 3)
   const suffix = form.dateSuffix || calculateNextDate()
   const code = form.randomCode ? form.randomCode.toUpperCase() : randomSevenDigitCode()
@@ -226,13 +277,20 @@ function initializeForm() {
   form.footerInfo = generateFooterInfo()
 }
 
-onMounted(() => { isInitializing = true; initializeForm(); isInitializing = false })
-
-watch([() => form.stationCode, () => form.datePrefix, () => form.sequence, () => form.dateTime, () => form.randomCode, () => form.dateSuffix], () => {
-  if (isInitializing) return
-  form.footerInfo = generateFooterInfo()
-  form.serial = form.randomCode || randomSevenDigitCode()
+onMounted(() => {
+  isInitializing = true
+  initializeForm()
+  isInitializing = false
 })
+
+watch(
+  [() => form.stationCode, () => form.datePrefix, () => form.sequence, () => form.dateTime, () => form.randomCode, () => form.dateSuffix],
+  () => {
+    if (isInitializing) return
+    form.footerInfo = generateFooterInfo()
+    form.serial = form.randomCode || randomSevenDigitCode()
+  }
+)
 
 const handleSaveImage = async () => {
   try {
@@ -249,7 +307,10 @@ const handleSaveImage = async () => {
     link.download = `${form.trainCode}_${form.passengerName}_火车票.png`
     link.click()
     link.remove()
-  } catch (error) { alert('图片保存失败，请重试！'); console.error('保存图片错误：', error) }
+  } catch (error) {
+    alert('图片保存失败，请重试！')
+    console.error('保存图片错误：', error)
+  }
 }
 </script>
 
@@ -267,8 +328,8 @@ const handleSaveImage = async () => {
   transform: scale(0.42);
   transform-origin: center center;
 }
-@media screen and (max-width: 640px) { 
-  .preview-container { height: 200px; } 
-  .preview-container .export-target { transform: scale(0.32); } 
+@media screen and (max-width: 640px) {
+  .preview-container { height: 200px; }
+  .preview-container .export-target { transform: scale(0.32); }
 }
 </style>
