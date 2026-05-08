@@ -227,7 +227,7 @@ const backgroundImage = computed(() => {
 })
 
 const showHeader = () => {
-  return props.style !== 'red'
+  return true // 红色票也显示票号
 }
 
 const dateTime = computed(() => ({
