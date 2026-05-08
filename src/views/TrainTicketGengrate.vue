@@ -101,7 +101,7 @@
                 :footerInfo="form.footerInfo"
                 :discountType="form.discountType"
                 :style="form.ticketType"
-                :refundFee="form.refundFee"
+                :hasRefundFee="form.hasRefundFee"
                 :detail-lines="form.detailLines"
               />
             </div>
@@ -131,8 +131,11 @@
               <!-- 退票费 -->
               <div class="border-b border-gray-200 pb-4">
                 <h3 class="text-base font-semibold text-gray-700 mb-3">💰 退票费</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div><label class="block text-xs text-gray-500 mb-1">退票费（元）</label><input v-model="form.refundFee" type="number" step="0.5" class="w-full px-3 py-2 border rounded-md" placeholder="例：20（可为空）"></div>
+                <div class="grid grid-cols-1 gap-3">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input v-model="form.hasRefundFee" type="checkbox" class="w-4 h-4">
+                    <span class="text-sm text-gray-600">显示"退票费"</span>
+                  </label>
                 </div>
               </div>
 
@@ -186,7 +189,7 @@
         :footerInfo="form.footerInfo"
         :discountType="form.discountType"
         :style="form.ticketType"
-        :refundFee="form.refundFee"
+        :hasRefundFee="form.hasRefundFee"
         :detail-lines="form.detailLines"
       />
     </div>
@@ -223,7 +226,7 @@ const form = reactive({
   sequence: '',
   dateSuffix: '',
   randomCode: '',
-  refundFee: '',
+  hasRefundFee: false,
 })
 
 const sleeperTypes = ['软卧', '硬卧', '动卧', '高级软卧', '一等卧', '二等卧', '新空调硬卧', '新空调软卧']
