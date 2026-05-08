@@ -1,4 +1,5 @@
 # 火车票 DIY 生成器
+## 本项目利用Vibe Coding实现，后续接入skills及更多利润票根、机票的生成
 
 > 🚄 基于 Vue 3 + Tailwind CSS 的火车票生成工具
 
