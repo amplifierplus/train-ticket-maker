@@ -108,8 +108,11 @@
 
             <!-- 价格和座位类型行：添加优惠标识 -->
             <div class="flex justify-between pr-[100px] items-center mt-[-10px]">
-              <div>
-                ￥{{ price }}<span class="text-[24px]">元</span>
+              <div class="relative">
+                <div>￥{{ price }}<span class="text-[24px]">元</span></div>
+                <div v-if="hasRefundFee" class="absolute left-0 text-[30px]" style="top: 100%;">
+                  退票费
+                </div>
               </div>
               <div>
                 <span v-for="(text, index) in discountTexts" :key="index" class="discount-badge">{{ text }}</span>
@@ -117,11 +120,6 @@
               <div class="seat flex items-center gap-[12px]">
                 {{ seatType }}
               </div>
-            </div>
-
-            <!-- 退票费行 -->
-            <div v-if="hasRefundFee" class="mt-[-8px] text-[30px]">
-              退票费
             </div>
 
             <p class="muted text-[30px]"><br></p>
