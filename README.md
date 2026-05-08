@@ -167,6 +167,15 @@ MIT License
 
 ---
 
+## 📌 问题反馈与联系
+使用中遇到任何问题、功能建议或 BUG，或者一些需要修改的更贴合实际车票的功能欢迎直接通过以下渠道反馈：
+
+- [提交 Issue](https://github.com/amplifierplus/train-ticket-maker/issues)：用于 BUG 反馈、功能需求
+- [参与 Discussions](https://github.com/amplifierplus/train-ticket-maker/discussions)：用于一般问题、使用交流
+
+我会在看到消息后尽快回复处理。
+
+---
 <div align="center">
 
 Vibe Coding + Claude Code + Qwen/Qwen3.5-397B-A17B
