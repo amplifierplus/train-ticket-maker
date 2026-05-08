@@ -101,6 +101,7 @@
                 :footerInfo="form.footerInfo"
                 :discountType="form.discountType"
                 :style="form.ticketType"
+                :refundFee="form.refundFee"
                 :detail-lines="form.detailLines"
               />
             </div>
@@ -124,6 +125,14 @@
                   <div><label class="block text-xs text-gray-500 mb-1">财收结帐日期(4位数字，一般为购票后一天，可设置为发车后一天)</label><input v-model="form.dateSuffix" type="text" class="w-full px-3 py-2 border rounded-md"></div>
                   <div class="sm:col-span-2"><label class="block text-xs text-gray-500 mb-1">车票编号（7位）</label><input v-model="form.randomCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：A000001" maxlength="7"></div>
                   <div class="sm:col-span-2"><div class="text-xs text-gray-500">完整编码：{{ form.footerInfo }}</div></div>
+                </div>
+              </div>
+
+              <!-- 退票费 -->
+              <div class="border-b border-gray-200 pb-4">
+                <h3 class="text-base font-semibold text-gray-700 mb-3">💰 退票费</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div><label class="block text-xs text-gray-500 mb-1">退票费（元）</label><input v-model="form.refundFee" type="number" step="0.5" class="w-full px-3 py-2 border rounded-md" placeholder="例：20（可为空）"></div>
                 </div>
               </div>
 
@@ -177,6 +186,7 @@
         :footerInfo="form.footerInfo"
         :discountType="form.discountType"
         :style="form.ticketType"
+        :refundFee="form.refundFee"
         :detail-lines="form.detailLines"
       />
     </div>
@@ -213,6 +223,7 @@ const form = reactive({
   sequence: '',
   dateSuffix: '',
   randomCode: '',
+  refundFee: '',
 })
 
 const sleeperTypes = ['软卧', '硬卧', '动卧', '高级软卧', '一等卧', '二等卧', '新空调硬卧', '新空调软卧']
