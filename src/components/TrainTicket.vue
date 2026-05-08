@@ -92,7 +92,18 @@
                 {{ dateTime.day }}<span class="small-fix text-[24px]">日</span>
                 {{ dateTime.time }}<span class="small-fix text-[24px]">开</span>
               </div>
-              <div class="seat">{{ carriage }}<span class="small-fix text-[24px]">车</span>{{ seatNumber }}<span class="small-fix text-[24px]">号</span><span v-if="berthType">{{ berthType }}</span><span v-if="berthType" class="small-fix text-[24px]">铺</span></div>
+              
+              <!-- ====================== 这里已修改 ====================== -->
+              <div class="seat">
+                {{ carriage }}<span class="small-fix text-[24px]">车</span>
+                {{ seatNumber }}
+                <!-- 只有不是“无座”时才显示“号”字 -->
+                <span v-if="seatNumber !== '无座'" class="small-fix text-[24px]">号</span>
+                <span v-if="berthType">{{ berthType }}</span>
+                <span v-if="berthType" class="small-fix text-[24px]">铺</span>
+              </div>
+              <!-- ========================================================= -->
+
             </div>
 
             <!-- 价格和座位类型行：添加优惠标识 -->
@@ -280,8 +291,8 @@ defineExpose({ wrapper, exporting })
 }
 
 .ticket {
-  font-smoothing: antialiased;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
 
