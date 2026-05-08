@@ -23,7 +23,7 @@
         <div
           class="ticket relative text-[35px] w-full h-full rounded-[14px] overflow-hidden"
           :style="{
-            padding: style === 'red' ? '50px 60px 0 60px' : '5px 60px 0 50px'
+            padding: style === 'red' ? '35px 60px 0 60px' : '5px 60px 0 50px'
           }"
           role="img"
           aria-label="火车票"
@@ -119,6 +119,13 @@
               </div>
             </div>
 
+            <!-- 退票费行 -->
+            <div v-if="refundFee" class="flex justify-between pr-[100px] items-center mt-[-8px]">
+              <div class="text-[30px]">
+                退票费：<span class="text-[35px]">￥{{ refundFee }}<span class="text-[24px]">元</span></span>
+              </div>
+            </div>
+
             <p class="muted text-[30px]"><br></p>
             <p class="muted text-[30px]">仅供纪念使用</p>
 
@@ -201,6 +208,7 @@ const props = defineProps({
   seatNumber: { type: String, default: '04D' },
   berthType: { type: String, default: '' },
   price: { type: String, default: '239.0' },
+  refundFee: { type: String, default: '' },
   seatType: { type: String, default: '二等座' },
   idNumber: { type: String, default: '14041111985****0854' },
   passengerName: { type: String, default: '李小二' },
@@ -372,7 +380,7 @@ defineExpose({ wrapper, exporting })
 /* 红色车票底部文字 */
 .footer-red {
   left: -40px;
-  bottom: 0px;
+  bottom: 8px;
   height: 52px;
 }
 </style>
