@@ -162,8 +162,21 @@ const hiddenTicketRef = ref(null)
 watch(() => form.seatType, (newVal) => { if (!sleeperTypes.includes(newVal)) form.berthType = '' })
 
 function randomNumber(min, max, length) { const num = Math.floor(Math.random() * (max - min + 1)) + min; return num.toString().padStart(length, '0') }
-function randomLetter() { const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; return letters[Math.floor(Math.random() * letters.length)] }
-function randomSevenDigitCode() { return `${randomLetter()}${randomNumber(1, 999999, 6)}` }
+// 随机大写字母 排除 I O
+function randomLetter() {
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  return letters[Math.floor(Math.random() * letters.length)]
+}
+
+// 7位票号：第1位字母(无I/O) + 第2位固定0 + 后5位数字
+// 格式：X0#####  7位总长
+function randomSevenDigitCode() {
+  const letter = randomLetter()
+  // 5位数字 00000 ~ 99999
+  const num = Math.floor(Math.random() * 100000).toString().padStart(5, '0')
+  // 第二位固定 0
+  return letter + '0' + num
+}
 
 // ==============================================
 // 已修改：只首字母大写，后面全部小写
