@@ -213,10 +213,11 @@ const props = defineProps({
     type: [String, Array],
     default: '',
     validator: (value) => {
+      const types = ['student', 'discount', 'child', 'elder', 'military', 'disabled', 'group', 'worker-group', 'student-group', '兑', '']
       if (Array.isArray(value)) {
-        return value.every(item => validTypes.includes(item))
+        return value.every(item => types.includes(item))
       }
-      return validTypes.includes(value)
+      return types.includes(value)
     }
   },
   detailLines: { type: Array, default: () => ['', ''] },
