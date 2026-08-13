@@ -26,7 +26,7 @@
             <div class="border-b border-gray-200 pb-4">
               <h3 class="text-lg font-semibold text-gray-700 mb-3">🕐 车次/时间</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div><label class="block text-xs text-gray-500 mb-1">车次</label><input v-model="form.trainCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：G2025" pattern="[GDKZT][0-9]+" title="以 G/D/K/Z/T 开头" required></div>
+                <div><label class="block text-xs text-gray-500 mb-1">车次</label><input v-model="form.trainCode" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：G2025" pattern="[GDKZTC][0-9]+" title="以 G/D/K/Z/T/C 开头" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">日期时间</label><input v-model="form.dateTime" type="datetime-local" class="w-full px-3 py-2 border rounded-md" required></div>
                 <div><label class="block text-xs text-gray-500 mb-1">检票口</label><input v-model="form.gate" type="text" class="w-full px-3 py-2 border rounded-md" placeholder="例：5A（可为空）"></div>
                 <div><label class="block text-xs text-gray-500 mb-1">座位类型</label><select v-model="form.seatType" class="w-full px-3 py-2 border rounded-md" required>
@@ -327,18 +327,20 @@ const handleSaveImage = async () => {
   try {
     const ticketRef = hiddenTicketRef.value
     if (!ticketRef) throw new Error('无法找到车票组件')
-    ticketRef.exporting = true
+    ticketRef.exporting.value = true
     await nextTick()
-    const node = ticketRef.wrapper || ticketRef.$el
+    const node = ticketRef.wrapper.value || ticketRef.$el
     if (!node) throw new Error('无法找到车票 DOM 节点')
     const dataUrl = await toPng(node, { cacheBust: true, backgroundColor: '#fff', quality: 1, pixelRatio: 3 })
-    ticketRef.exporting = false
+    ticketRef.exporting.value = false
     const link = document.createElement('a')
     link.href = dataUrl
     link.download = `${form.trainCode}_${form.passengerName}_火车票.png`
     link.click()
     link.remove()
   } catch (error) {
+    const ticketRef = hiddenTicketRef.value
+    if (ticketRef) ticketRef.exporting.value = false
     alert('图片保存失败，请重试！')
     console.error('保存图片错误：', error)
   }

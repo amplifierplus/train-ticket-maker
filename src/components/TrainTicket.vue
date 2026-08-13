@@ -130,15 +130,15 @@
               <div>
                 <div class="code">{{ idNumber }} {{ passengerName }}</div>
                 <!-- 虚线框 -->
-                <div v-if="showHeader()" class="details text-[24px] text-center mt-[-6px]">
-                  <p>报销凭证 遗失不补</p>
-                  <p>退票改签时须交回车站</p>
+                <div v-if="!isRed" class="details text-[24px] text-center mt-[-6px]">
+                  <p>{{ detailLines[0] || '报销凭证 遗失不补' }}</p>
+                  <p>{{ detailLines[1] || '退票改签时须交回车站' }}</p>
                 </div>
                 <div v-else class="details text-[24px] text-center mt-[-6px]">
-                  <p>买票请到 12306 发货请到 95306</p>
-                  <p>中国铁路祝您旅途愉快</p>
+                  <p>{{ detailLines[0] || '买票请到 12306 发货请到 95306' }}</p>
+                  <p>{{ detailLines[1] || '中国铁路祝您旅途愉快' }}</p>
                 </div>
-                <div class="footer-red" v-if="!showHeader()">
+                <div class="footer-red" v-if="isRed">
                   <div class="text-[30px]">{{ footerInfo }}</div>
                 </div>
               </div>
@@ -151,7 +151,7 @@
           </div>
 
           <!-- 底部出票信息 -->
-          <div class="footer" v-if="showHeader()">
+          <div class="footer" v-if="!isRed">
             <div class="px-[50px] text-[30px]">{{ footerInfo }}</div>
           </div>
         </div>
@@ -163,7 +163,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-const validTypes = ['student', 'discount', 'child', 'elder', 'military', 'disabled', 'group', 'worker-group', 'student-group', '']
+const validTypes = ['student', 'discount', 'child', 'elder', 'military', 'disabled', 'group', 'worker-group', 'student-group', '兑', '']
 
 // 基础尺寸
 const BASE_WIDTH = 856
@@ -213,13 +213,13 @@ const props = defineProps({
     type: [String, Array],
     default: '',
     validator: (value) => {
-      const validTypes = ['student', 'discount', 'child', 'elder', 'military', 'disabled', 'group', 'worker-group', 'student-group', '']
       if (Array.isArray(value)) {
         return value.every(item => validTypes.includes(item))
       }
       return validTypes.includes(value)
     }
   },
+  detailLines: { type: Array, default: () => ['', ''] },
   style: { type: String, default: 'red', validator: (value) => ['blue', 'red'].includes(value) }
 })
 
@@ -229,10 +229,6 @@ const isRed = computed(() => props.style === 'red')
 const backgroundImage = computed(() => {
   return props.style === 'red' ? "url('./redbg.png')" : "url('./bluebg.png')"
 })
-
-const showHeader = () => {
-  return true // 红色票也显示票号
-}
 
 const dateTime = computed(() => ({
   year: props.dateTime.slice(0, 4),
