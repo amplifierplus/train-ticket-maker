@@ -327,12 +327,12 @@ const handleSaveImage = async () => {
   try {
     const ticketRef = hiddenTicketRef.value
     if (!ticketRef) throw new Error('无法找到车票组件')
-    ticketRef.exporting.value = true
+    ticketRef.exporting = true
     await nextTick()
-    const node = ticketRef.wrapper.value || ticketRef.$el
+    const node = ticketRef.wrapper || ticketRef.$el
     if (!node) throw new Error('无法找到车票 DOM 节点')
     const dataUrl = await toPng(node, { cacheBust: true, backgroundColor: '#fff', quality: 1, pixelRatio: 3 })
-    ticketRef.exporting.value = false
+    ticketRef.exporting = false
     const link = document.createElement('a')
     link.href = dataUrl
     link.download = `${form.trainCode}_${form.passengerName}_火车票.png`
@@ -340,7 +340,7 @@ const handleSaveImage = async () => {
     link.remove()
   } catch (error) {
     const ticketRef = hiddenTicketRef.value
-    if (ticketRef) ticketRef.exporting.value = false
+    if (ticketRef) ticketRef.exporting = false
     alert('图片保存失败，请重试！')
     console.error('保存图片错误：', error)
   }
