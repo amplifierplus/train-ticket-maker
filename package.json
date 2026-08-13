@@ -27,6 +27,9 @@
   "build": {
     "appId": "com.ticket.maker",
     "productName": "TicketMaker",
+    "directories": {
+      "output": "release"
+    },
     "mac": {
       "target": "dmg",
       "icon": "icon.icns",
@@ -39,6 +42,13 @@
     "files": [
       "dist/**/*",
       "main.js"
+    ],
+    "extraResources": [
+      {
+        "from": "public/",
+        "to": "public/",
+        "filter": ["**/*"]
+      }
     ]
   }
 }

@@ -1,32 +1,39 @@
-name: Build Mac App
+name: Build & Release
 
 on:
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
-  build:
+  build-mac:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Build Vue
+      - name: Build Vite
         run: npm run build
 
-      - name: Build Electron for Mac
-        run: npx electron-builder --mac --publish never
+      - name: Build Electron (macOS DMG)
+        run: npm run electron:build -- --mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Mac Build
+      - name: Upload DMG artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mac-build
-          path: dist/
+          name: TicketMaker-mac
+          path: release/**/*.dmg
+          if-no-files-found: error
